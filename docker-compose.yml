@@ -1,0 +1,39 @@
+version: "3.6"
+
+services:
+  hap-server:
+    container_name: server
+    build: ./services/server
+    working_dir: /usr/src/app
+    environment:
+      DB_URL: postgres://isaiah:secret@postgres:5432/hap
+      POSTGRES_USER: isaiah
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: hap
+      POSTGRES_HOST: postgres
+    links:
+      - postgres
+    volumes:
+      - ./services/server:/usr/src/app
+    ports:
+      - "8080:8080"
+
+  hap-web:
+    container_name: web
+    build: ./services/web
+    working_dir: /usr/src/app
+    volumes:
+      - ./services/web:/usr/src/app
+    ports:
+      - "3000:3000"
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: isaiah
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: hap
+      POSTGRES_HOST: postgres
+    ports:
+      - "5432:5432"

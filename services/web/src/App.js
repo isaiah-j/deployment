@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+
+import axios from "axios";
+
+import logo from "./logo.svg";
+import "./App.css";
 
 function App() {
+  const [data, setData] = useState({});
+
+  const fetchData = () => {
+    axios
+      .get("http://localhost:8080/data")
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data);
+      })
+      .catch((err) => alert("error! error! oh no!"));
+  };
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Fetcher</h1>
+      <p>{JSON.stringify(data)}</p>
+      <button onClick={fetchData}>Fetch data!</button>
     </div>
   );
 }
